@@ -2,13 +2,13 @@ name: EarlyAccess
 
 on:
   push:
-    branches: [ main ]
+    #branches: [ main ]
 
 jobs:
   # Build jlink distribution per runner
   build:
     name: 'Build with Java on ${{ matrix.os }}'
-    if: github.repository == 'cbeams/bisq2' && startsWith(github.event.head_commit.message, 'Release v') != true
+    #if: github.repository == 'cbeams/bisq2' && startsWith(github.event.head_commit.message, 'Release v') != true
     strategy:
       fail-fast: true
       matrix:
@@ -40,16 +40,14 @@ jobs:
                 ${{ runner.os }}-gradlew-
 
       - name: Build
-        run: ./gradlew runtimeZip
+        run: ./gradlew build runtimeZip
 
       - name: 'Upload build artifact'
         uses: actions/upload-artifact@v2
         with:
           name: artifacts
           path: |
-            app/cli/build/distributions/*.zip
-            app/daemon/build/distributions/*.zip
-            app/fx/build/distributions/*.zip
+            app/**/build/distributions/*.zip
 
   # Collect all distributions and release
   release:
